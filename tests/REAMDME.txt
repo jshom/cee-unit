@@ -1,9 +1,0 @@
-ah yes, one would test a library that tests
-
-gotta love dogfooding
-
-godspeed.
-
-----------
-
-Vest way to test using this is to see how we test the testing library :)
