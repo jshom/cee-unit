@@ -240,7 +240,7 @@ CEEU_assert* CEEU_assert__int_equals(int value, int expectation) {
 /**
  * [CEE_UNIT]
  * CEEU_assert > str_equals - Create assertion to check for same string values
- * Reports failure in form of: [Failed to assert {value} equals {expectation}]
+ * Reports failure in form of: [Failed to assert ("{value}") equals ("{expectation}")]
  */
 CEEU_assert* CEEU_assert__str_equals(char* value, const char* expectation) {
     char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE_LARGE);
@@ -283,7 +283,7 @@ CEEU_assert* CEEU_assert__is_NULL(void* p, const char* name) {
 
 /**
  * [CEE_UNIT]
- * CEEU_assert > is_not_NULL - Create assertion to check a point is NOT NULL
+ * CEEU_assert > is_not_NULL - Create assertion to check a pointer is NOT NULL
  * Reports failure in form of: [Failed to assert {value} equals {expectation}]
  */
 CEEU_assert* CEEU_assert__is_not_NULL(void* p, const char* name) {
