@@ -8,6 +8,7 @@ CEEU_test_result* test__CEEU_test_runner__new() {
     result *= trnr->size == 0;
     result *= trnr->head == NULL;
     result *= trnr->tail == NULL;
+    result *= trnr->num_successful == 0;
     return CEEU_test_result__new(result, (char *) __func__);
 }
 
@@ -40,6 +41,7 @@ CEEU_test_result* test__CEEU_test_runner__execute__successful() {
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__new);
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__add_test);
     result *= CEEU_test_runner__exec(trnr, 0) == 0;
+    result *= trnr->num_successful == 2;
     return CEEU_test_result__new(result, (char*) __func__);
 }
 
@@ -49,5 +51,6 @@ CEEU_test_result* test__CEEU_test_runner__execute__failing() {
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__new);
     CEEU_test_runner__add_test(trnr, &test__fail_1);
     result *= CEEU_test_runner__exec(trnr, 0) == 1;
+    result *= trnr->num_successful = 1;
     return CEEU_test_result__new(result, (char*) __func__);
 }

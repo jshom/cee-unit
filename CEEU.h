@@ -2,7 +2,6 @@
  * A super simple C Unit Testing library
  * Cee how light weight it is, and thats why we call it Cee Unit :)
  */
-
 #ifndef __CEEU__
 #define __CEEU__
 
@@ -36,6 +35,7 @@ typedef struct CEEU_test_runner {
     struct CEEU_test_node* head;
     struct CEEU_test_node* tail;
     int size;
+    int num_successful;
 } CEEU_test_runner;
 
 /* [CEE_UNIT] CEEU_test_result > new - Construct new test result */
@@ -78,6 +78,8 @@ CEEU_test_runner* CEEU_test_runner__new() {
     trnr->head = NULL;
     trnr->tail = NULL;
     trnr->size = 0;
+    trnr->num_successful = 0;
+    trnr->status = CEEU_SUCCESS;
     return trnr;
 }
 
@@ -94,6 +96,24 @@ void CEEU_test_runner__add_test(CEEU_test_runner* trnr, CEEU_test tf) {
     trnr->size += 1;
 }
 
+void CEEU_test_runner__print(
+    CEEU_test_runner* trnr,
+    int enable_output
+) {
+    if (!enable_output) return;
+    CEEU_test_node* tn = trnr->head;
+    while (tn) {
+        CEEU_test_result__print(tn->tr);
+        tn = tn->next_test;
+    }
+    printf("** SUMMARY **\n");
+    printf("%d out of %d tests successfull (%d\%% passed)\n",
+        trnr->num_successful,
+        trnr->size,
+        (int) (100 * (double) trnr->num_successful/trnr->size)
+    );
+}
+
 /**
  * [CEE_UNIT]
  * CEEU_test_runner > exec - Executes all added tests
@@ -106,17 +126,15 @@ int CEEU_test_runner__exec(
     CEEU_test_runner* trnr, /* test runner */
     int enable_output /* enable logging */
 ) {
-    int final_status = CEEU_SUCCESS;
     CEEU_test_node* tn = trnr->head;
     while (tn) {
         CEEU_test_node__run(tn);
-        if (enable_output) {
-            CEEU_test_result__print(tn->tr);
-        }
-        final_status *= tn->tr->result_status;
+        trnr->status *= tn->tr->result_status;
+        trnr->num_successful += tn->tr->result_status;
         tn = tn->next_test;
     }
-    return !final_status;
+    CEEU_test_runner__print(trnr, enable_output);
+    return !trnr->status;
 }
 
 #endif
