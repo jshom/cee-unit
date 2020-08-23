@@ -178,7 +178,7 @@ CEEU_assertions* CEEU_assertions__new(const char* name) {
     return a;
 }
 
-/* [CEE_UNIT] CEEU_assertions > new - Create new assertions list */
+/* [CEE_UNIT] CEEU_assertions > add - Add assertion to CEEU_assertions */
 void CEEU_assertions__add(CEEU_assertions* as, CEEU_assert* a) {
     if (!as->head) {
         as->head = a;
@@ -189,7 +189,7 @@ void CEEU_assertions__add(CEEU_assertions* as, CEEU_assert* a) {
     }
 }
 
-/* [CEE_UNIT] CEEU_assertions > new - Create new assertions list */
+/* [CEE_UNIT] CEEU_assertions > resolve - Return new test result based on the status of provided assertions */
 CEEU_test_result* CEEU_assertions__resolve(CEEU_assertions* as) {
     CEEU_assert* a = as->head;
     while (a) {
@@ -199,16 +199,26 @@ CEEU_test_result* CEEU_assertions__resolve(CEEU_assertions* as) {
     return CEEU_test_result__new(as->status, as->name);
 }
 
-CEEU_assert* CEEU_assert__int_equals(int a, int b) {
+/**
+ * [CEE_UNIT]
+ * CEEU_assert > int_equals - Create assertion to check for same integers values
+ * Reports failure in form of: [Failed to assert {value} equals {expectation}]
+ */
+CEEU_assert* CEEU_assert__int_equals(int value, int expectation) {
     char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
-    sprintf(failure_message, "Failed to assert %d equals %d", a, b);
-    return CEEU_assert__new(a == b, failure_message);
+    sprintf(failure_message, "Failed to assert %d equals %d", value, expectation);
+    return CEEU_assert__new(value == expectation, failure_message);
 }
 
-CEEU_assert* CEEU_assert__is_true(int a, const char* name) {
+/**
+ * [CEE_UNIT]
+ * CEEU_assert > is_true - Create assertion to check that the param is non-zero
+ * Reports failure in form of: [Failed to assert "{name}" is true]
+ */
+CEEU_assert* CEEU_assert__is_true(int value, const char* name) {
     char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
     sprintf(failure_message, "Failed to assert \"%s\" is true", name);
-    return CEEU_assert__new(a != 0, failure_message);
+    return CEEU_assert__new(value != 0, failure_message);
 }
 
 #endif
