@@ -1,4 +1,4 @@
-# cee-unit ![badge](https://action-badges.now.sh/jshom/cee-unit?action=ci)
+# cee-unit ![badge](https://action-badges.now.sh/jshom/cee-unit?action=ci) ![badge](https://img.shields.io/github/license/jshom/cee-unit)
 
 Unit testing for C Projects, this should really be one file to import and
 simple to use and understand. Building this since gonna be writing some stuff
