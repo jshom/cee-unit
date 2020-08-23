@@ -9,12 +9,12 @@ CEEU_test_result* test__CEEU_test_runner__new() {
     result *= trnr->head == NULL;
     result *= trnr->tail == NULL;
     result *= trnr->num_successful == 0;
-    return CEEU_test_result__new(result, (char *) __func__);
+    return CEEU_test_result__new(result, __func__);
 }
 
 /* test function used to test test node */
 CEEU_test_result* test__fail_1() {
-    return CEEU_test_result__new(CEEU_FAILURE, (char*) __func__);
+    return CEEU_test_result__new(CEEU_FAILURE, __func__);
 }
 
 CEEU_test_result* test__CEEU_test_runner__add_test() {
@@ -32,7 +32,7 @@ CEEU_test_result* test__CEEU_test_runner__add_test() {
     result *= trnr->head != NULL;
     result *= trnr->head != trnr->tail;
 
-    return CEEU_test_result__new(result, (char *) __func__);
+    return CEEU_test_result__new(result, __func__);
 }
 
 CEEU_test_result* test__CEEU_test_runner__execute__successful() {
@@ -42,7 +42,7 @@ CEEU_test_result* test__CEEU_test_runner__execute__successful() {
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__add_test);
     result *= CEEU_test_runner__exec(trnr, 0) == 0;
     result *= trnr->num_successful == 2;
-    return CEEU_test_result__new(result, (char*) __func__);
+    return CEEU_test_result__new(result, __func__);
 }
 
 CEEU_test_result* test__CEEU_test_runner__execute__failing() {
@@ -52,5 +52,5 @@ CEEU_test_result* test__CEEU_test_runner__execute__failing() {
     CEEU_test_runner__add_test(trnr, &test__fail_1);
     result *= CEEU_test_runner__exec(trnr, 0) == 1;
     result *= trnr->num_successful = 1;
-    return CEEU_test_result__new(result, (char*) __func__);
+    return CEEU_test_result__new(result, __func__);
 }

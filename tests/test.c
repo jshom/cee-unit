@@ -4,18 +4,14 @@
 #include "./test_suites/CEEU_test_result.h"
 #include "./test_suites/CEEU_test_node.h"
 #include "./test_suites/CEEU_test_runner.h"
-
-CEEU_test_result* test__always_succeeds() {
-    return CEEU_test_result__new(CEEU_SUCCESS, (char* ) __FUNCTION__);
-}
+#include "./test_suites/CEEU_assert.h"
+#include "./test_suites/CEEU_assertions.h"
 
 int main() {
     // create test runner
     CEEU_test_runner* trnr = CEEU_test_runner__new();
 
     // add tests
-    CEEU_test_runner__add_test(trnr, &test__always_succeeds);
-
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new);
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new__with_failure);
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new__non_zero_or_one);
@@ -28,6 +24,18 @@ int main() {
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__add_test);
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__execute__successful);
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__execute__failing);
+
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__new__success);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__new__failure);
+
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__is_true__success);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__is_true__failure);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__int_equals__success);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assert__int_equals__failure);
+
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assertions__new);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assertions__add);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_assertions__resolve);
 
     /* run all tests */
     return CEEU_test_runner__exec(trnr, 1);
