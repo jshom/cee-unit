@@ -1,28 +1,34 @@
-#include "../CU.h" // you would download CU.h and have in your project
+#include "../CEEU.h" // you would download CEEU.h and have in your project
 
 /* test suites */
-#include "./test_suites/CU_test_result.h"
-#include "./test_suites/CU_test_node.h"
+#include "./test_suites/CEEU_test_result.h"
+#include "./test_suites/CEEU_test_node.h"
+#include "./test_suites/CEEU_test_runner.h"
 
-CU_test_result* test__always_succeeds() {
-    return CU_test_result__new(CU_SUCCESS, (char* ) __FUNCTION__);
+CEEU_test_result* test__always_succeeds() {
+    return CEEU_test_result__new(CEEU_SUCCESS, (char* ) __FUNCTION__);
 }
 
 int main() {
     // create test runner
-    CU_test_runner* trnr = CU_test_runner__new();
+    CEEU_test_runner* trnr = CEEU_test_runner__new();
 
     // add tests
-    CU_test_runner__add_test(trnr, &test__always_succeeds);
+    CEEU_test_runner__add_test(trnr, &test__always_succeeds);
 
-    CU_test_runner__add_test(trnr, &test__CU_test_result__new);
-    CU_test_runner__add_test(trnr, &test__CU_test_result__new__with_failure);
-    CU_test_runner__add_test(trnr, &test__CU_test_result__new__non_zero_or_one);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new__with_failure);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_result__new__non_zero_or_one);
 
-    CU_test_runner__add_test(trnr, &test__CU_test_node__new);
-    CU_test_runner__add_test(trnr, &test__CU_test_node__run);
-    CU_test_runner__add_test(trnr, &test__CU_test_node__run__with_failed_test);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_node__new);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_node__run);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_node__run__with_failed_test);
 
-    // run all tests
-    return CU_test_runner__exec(trnr);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__new);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__add_test);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__execute__successful);
+    CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__execute__failing);
+
+    /* run all tests */
+    return CEEU_test_runner__exec(trnr, 1);
 }
