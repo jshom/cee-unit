@@ -7,17 +7,37 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const short int CEEU_SUCCESS = 1;
 const short int CEEU_FAILURE = 0;
 const char* CEEU_SUCCESS_MSG = "SUCCESS";
 const char* CEEU_FAILURE_MSG = "FAILURE";
 const size_t CEEU_ASSERTION_MESSAGE_SIZE = 128;
+const size_t CEEU_ASSERTION_MESSAGE_SIZE_LARGE = 1024;
+
+/* [CEE_UNIT] Type for an assertion i.e. expect some int to equal 5 */
+typedef struct CEEU_assert {
+    char* message;
+    int status;
+    struct CEEU_assert* next_assert;
+} CEEU_assert;
+
+
+/* [CEE_UNIT] Type for list of assertions to be used in test functions */
+typedef struct CEEU_assertions {
+    const char* name;
+    CEEU_assert* head;
+    CEEU_assert* tail;
+    int status;
+} CEEU_assertions;
+
 
 /* [CEE_UNIT] Type for the result of a test case */
 typedef struct CEEU_test_result {
     int result_status;
     const char* name;
+    CEEU_assertions* assertions;
 } CEEU_test_result;
 
 /* [CEE_UNIT] Type for a function pointer that returns a test result */
@@ -47,6 +67,29 @@ CEEU_test_result* CEEU_test_result__new(int status, const char* name) {
     return tr;
 }
 
+/* [CEE_UNIT] CEEU_test_result > new - Construct new test result from assertions */
+CEEU_test_result* CEEU_test_result__new_from_assertions(CEEU_assertions* as) {
+    CEEU_test_result* tr = (CEEU_test_result*) malloc(sizeof(CEEU_test_result));
+    tr->result_status = as->status;
+    tr->name = as->name;
+    tr->assertions = as;
+    return tr;
+}
+
+/* [CEE_UNIT] CEEU_assertions > print - Print assertions with option for all, or only failed */
+void CEEU_assertions__print(
+    CEEU_assertions* as
+) {
+   CEEU_assert* a = as->head;
+   while (a) {
+       if (a->status == CEEU_FAILURE) {
+           printf("\t[FAILED ASSERTION] %s\n", a->message);
+       }
+       a = a->next_assert;
+   }
+}
+
+
 /* [CEE_UNIT] CEEU_test_result > print - Print result of the completed test */
 void CEEU_test_result__print(CEEU_test_result* tr) {
     const char* msg_status;
@@ -56,6 +99,9 @@ void CEEU_test_result__print(CEEU_test_result* tr) {
         msg_status = CEEU_FAILURE_MSG;
     }
     printf("[%s] for %s\n", msg_status, tr->name);
+    if (tr->assertions) {
+        CEEU_assertions__print(tr->assertions);
+    }
 }
 
 /* [CEE_UNIT] CEEU_test_node > new - Construct new test node for execution list */
@@ -108,10 +154,10 @@ void CEEU_test_runner__print(
         tn = tn->next_test;
     }
     printf("** SUMMARY **\n");
-    printf("%d out of %d tests successfull (%d%% passed)\n",
+    printf("%d out of %d tests successful (%d%% passed)\n",
         trnr->num_successful,
         trnr->size,
-        (int) (100 * (double) trnr->num_successful/trnr->size)
+        (int) (100 * trnr->num_successful/trnr->size)
     );
 }
 
@@ -137,17 +183,6 @@ int CEEU_test_runner__exec(
     CEEU_test_runner__print(trnr, enable_output);
     return !trnr->status;
 }
-
-/* [CEE_UNIT] Type for assertion message */
-typedef char CEEU_assertion_message[128];
-
-/* [CEE_UNIT] Type for an assertion i.e. expect some int to equal 5 */
-typedef struct CEEU_assert {
-    char* message;
-    int status;
-    struct CEEU_assert* next_assert;
-} CEEU_assert;
-
 /* [CEE_UNIT] CEEU_assert > new - Create new assertion */
 CEEU_assert* CEEU_assert__new(int status, char* failure_message) {
     CEEU_assert* a = (CEEU_assert*) malloc(sizeof(CEEU_assert));
@@ -159,14 +194,6 @@ CEEU_assert* CEEU_assert__new(int status, char* failure_message) {
     }
     return a;
 }
-
-/* [CEE_UNIT] Type for list of assertions to be used in test functions */
-typedef struct CEEU_assertions {
-    const char* name;
-    CEEU_assert* head;
-    CEEU_assert* tail;
-    int status;
-} CEEU_assertions;
 
 /* [CEE_UNIT] CEEU_assertions > new - Create new assertions list */
 CEEU_assertions* CEEU_assertions__new(const char* name) {
@@ -196,7 +223,7 @@ CEEU_test_result* CEEU_assertions__resolve(CEEU_assertions* as) {
         as->status *= a->status;
         a = a->next_assert;
     }
-    return CEEU_test_result__new(as->status, as->name);
+    return CEEU_test_result__new_from_assertions(as);
 }
 
 /**
@@ -212,6 +239,17 @@ CEEU_assert* CEEU_assert__int_equals(int value, int expectation) {
 
 /**
  * [CEE_UNIT]
+ * CEEU_assert > str_equals - Create assertion to check for same string values
+ * Reports failure in form of: [Failed to assert {value} equals {expectation}]
+ */
+CEEU_assert* CEEU_assert__str_equals(char* value, const char* expectation) {
+    char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE_LARGE);
+    sprintf(failure_message, "Failed to assert (\"%s\") equals (\"%s\")", value, expectation);
+    return CEEU_assert__new(strcmp(value, expectation) == 0, failure_message);
+}
+
+/**
+ * [CEE_UNIT]
  * CEEU_assert > is_true - Create assertion to check that the param is non-zero
  * Reports failure in form of: [Failed to assert "{name}" is true]
  */
@@ -219,6 +257,39 @@ CEEU_assert* CEEU_assert__is_true(int value, const char* name) {
     char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
     sprintf(failure_message, "Failed to assert \"%s\" is true", name);
     return CEEU_assert__new(value != 0, failure_message);
+}
+
+/**
+ * [CEE_UNIT]
+ * CEEU_assert > is_false - Create assertion to check that the param is false
+ * Reports failure in form of: [Failed to assert "{name}" is false]
+ */
+CEEU_assert* CEEU_assert__is_false(int value, const char* name) {
+    char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
+    sprintf(failure_message, "Failed to assert \"%s\" is false", name);
+    return CEEU_assert__new(value == 0, failure_message);
+}
+
+/**
+ * [CEE_UNIT]
+ * CEEU_assert > is_NULL - Create assertion to check a pointer is NULL
+ * Reports failure in form of: [Failed to assert {value} equals {expectation}]
+ */
+CEEU_assert* CEEU_assert__is_NULL(void* p, const char* name) {
+    char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
+    sprintf(failure_message, "Failed to assert \"%s\" is NULL", name);
+    return CEEU_assert__new(p == NULL, failure_message);
+}
+
+/**
+ * [CEE_UNIT]
+ * CEEU_assert > is_not_NULL - Create assertion to check a point is NOT NULL
+ * Reports failure in form of: [Failed to assert {value} equals {expectation}]
+ */
+CEEU_assert* CEEU_assert__is_not_NULL(void* p, const char* name) {
+    char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
+    sprintf(failure_message, "Failed to assert \"%s\" is not NULL", name);
+    return CEEU_assert__new(p != 0, failure_message);
 }
 
 #endif

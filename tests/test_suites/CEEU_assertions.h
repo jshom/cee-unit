@@ -27,7 +27,7 @@ CEEU_test_result* test__CEEU_assertions__add() {
 CEEU_test_result* test__CEEU_assertions__resolve() {
     CEEU_assertions* as = CEEU_assertions__new(__func__);
     CEEU_assertions__add(as, CEEU_assert__int_equals(1, 1));
-    CEEU_assertions__add(as, CEEU_assert__is_true(1, "zero"));
+    CEEU_assertions__add(as, CEEU_assert__is_true(1, "always true"));
     CEEU_test_result* tr = CEEU_assertions__resolve(as);
     int result = CEEU_SUCCESS;
     result *= tr->result_status == CEEU_SUCCESS;
