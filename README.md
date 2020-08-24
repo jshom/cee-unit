@@ -1,7 +1,6 @@
 # cee-unit ![badge](https://action-badges.now.sh/jshom/cee-unit?action=ci) ![badge](https://img.shields.io/github/license/jshom/cee-unit)
 
-Little library for C Unit testing, one file (CEEU.h) to import and
-simple to use and understand.
+Little library for C Unit testing; one file [CEEU.h](https://github.com/jshom/cee-unit/blob/master/CEEU.h)
 
 ## Usage
 
