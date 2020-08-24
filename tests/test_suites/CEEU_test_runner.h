@@ -1,4 +1,3 @@
-/* test suite for test_result */
 #include "../../CEEU.h"
 #include <string.h>
 
@@ -46,7 +45,6 @@ CEEU_test_result* test__CEEU_test_runner__execute__successful() {
 }
 
 CEEU_test_result* test__CEEU_test_runner__execute__failing() {
-    int result = 1;
     CEEU_test_runner* trnr = CEEU_test_runner__new();
     CEEU_test_runner__add_test(trnr, &test__CEEU_test_runner__new);
     CEEU_test_runner__add_test(trnr, &test__fail_1);
