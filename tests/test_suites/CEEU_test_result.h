@@ -1,4 +1,3 @@
-/* test suite for test_result */
 #include "../../CEEU.h"
 #include <string.h>
 
