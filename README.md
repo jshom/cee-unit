@@ -20,7 +20,7 @@ CEEU_test_result* test__is_a_success() {
     CEEU_assertions* as = CEEU_assertions(__func__);
 
     // add assertion to check that 1 == 1
-    CEEU_assertions__add(CEEU_assert__int_equals(1, 1));
+    CEEU_assertions__add(as, CEEU_assert__int_equals(1, 1));
 
     // return all of our assertions
     return CEEU_assertions__resolve(as);
@@ -31,7 +31,7 @@ int main() {
     CEEU_test_runner* trnr = CEEU_test_runner__new();
 
     // add a test, or more
-    CEEU_test_runner__add_test(trnr, test__is_a_success);
+    CEEU_test_runner__add_test(trnr, &test__is_a_success);
 
     // execute all of our tests that we added to the test runner
     return CEEU_test_runner__exec(trnr);
