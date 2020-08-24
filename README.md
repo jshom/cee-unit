@@ -5,7 +5,7 @@ simple to use and understand.
 
 ## Usage
 
-For full example, see ./tests/, this project is testing using itself.
+For full example, see [./tests/](https://github.com/jshom/cee-unit/tree/master/tests), this project is testing itself... gotta love dogfooding :)
 
 ### Quick Start
 
@@ -15,7 +15,6 @@ And then, lets download CEEU.h from a release so that we can reference it in our
 
 ```c
 #include "./CEEU.h"
-
 
 CEEU_test_result* test__is_a_success() {
     // create assertion set
@@ -59,12 +58,14 @@ typedef struct Book {
 CEEU_assert CEEU_assert__book_equals(Book* book_a, Book* book_b) {
     char* failure_message = (char*) malloc(CEEU_ASSERTION_MESSAGE_SIZE);
     // use CEEU_ASSERTION_MESSAGE_SIZE_LARGE if you need more space
+    
     sprintf(
         failure_message,
         "Failed to assert Book[%d] equals Book[%d]",
         book_a->id,
         book_b->id
     );
+    
     // return a new assertion that will only show failure message if check if false
     return CEEU_assert__new(book_a->id == book_b->id, failure_message);
 }
@@ -75,7 +76,7 @@ If you feel like an assertion you write is broadly applicable, please create a P
 
 ## Two Cents
 
-Highly recommend using clangd so you can get some sweet autocomplete
+Highly recommend using clangd so you can get some sweet autocomplete to show all available assertions and functions.
 
 ## License
 
