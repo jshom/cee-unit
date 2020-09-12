@@ -79,4 +79,4 @@ Highly recommend using clangd so you can get some sweet autocomplete to show all
 
 ## License
 
-Licensed under GPLv3; Please keep this in public domain, thx!
+Licensed under GPLv3. Please keep this in public domain, thx!
