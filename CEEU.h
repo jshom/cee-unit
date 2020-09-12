@@ -23,7 +23,6 @@ typedef struct CEEU_assert {
     struct CEEU_assert* next_assert;
 } CEEU_assert;
 
-
 /* [CEE_UNIT] Type for list of assertions to be used in test functions */
 typedef struct CEEU_assertions {
     const char* name;
@@ -31,7 +30,6 @@ typedef struct CEEU_assertions {
     CEEU_assert* tail;
     int status;
 } CEEU_assertions;
-
 
 /* [CEE_UNIT] Type for the result of a test case */
 typedef struct CEEU_test_result {
