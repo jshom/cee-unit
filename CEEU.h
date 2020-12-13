@@ -2,7 +2,7 @@
  * A super simple C Unit Testing library
  * Cee how light weight it is, and thats why we call it Cee Unit :)
  *
- * cee-unit v0.4 (https://github.com/jshom/cee-unit)
+ * cee-unit v0.4.1 (https://github.com/jshom/cee-unit)
  * Licensed under the GPLv3 License (https://github.com/jshom/cee-unit/blob/master/LICENSE)
  */
 #ifndef __CEEU__
