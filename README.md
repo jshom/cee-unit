@@ -49,7 +49,7 @@ Here is an example of adding a new assertion for `CEEU_assert__book_equals`
 ```c
 /* ... standard CEEU.h stuff above ... */
 
-typedef struct Book {
+typedef struct {
     int id;
     /* more code... */
 } Book;

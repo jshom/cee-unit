@@ -27,7 +27,7 @@ typedef struct CEEU_assert {
 } CEEU_assert;
 
 /* [CEE_UNIT] Type for list of assertions to be used in test functions */
-typedef struct CEEU_assertions {
+typedef struct {
     const char* name;
     CEEU_assert* head;
     CEEU_assert* tail;
@@ -35,7 +35,7 @@ typedef struct CEEU_assertions {
 } CEEU_assertions;
 
 /* [CEE_UNIT] Type for the result of a test case */
-typedef struct CEEU_test_result {
+typedef struct {
     int result_status;
     const char* name;
     CEEU_assertions* assertions;
@@ -52,7 +52,7 @@ typedef struct CEEU_test_node {
 } CEEU_test_node;
 
 /* [CEE_UNIT] Type for a linked list of tests that has a final status */
-typedef struct CEEU_test_runner {
+typedef struct {
     int status;
     struct CEEU_test_node* head;
     struct CEEU_test_node* tail;
