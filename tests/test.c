@@ -1,4 +1,4 @@
-#include "../CEEU.h" // you would download CEEU.h and have in your project
+#include "CEEU.h" // you would download CEEU.h and have in your project
 
 /* test suites */
 #include "./test_suites/CEEU_test_result.h"

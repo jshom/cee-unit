@@ -86,7 +86,7 @@ CEEU_test_result* test__CEEU_assert__is_NULL__failure() {
     int* p_int = (int*) malloc(sizeof(int));
     CEEU_test_result* tr_for_test = CEEU_test_result__new(CEEU_SUCCESS, __func__);
     CEEU_assert* a_tr = CEEU_assert__is_NULL(tr_for_test, "tr_for_test");
-    CEEU_assert* a_int = CEEU_assert__is_NULL(a_int, "p_int");
+    CEEU_assert* a_int = CEEU_assert__is_NULL(p_int, "p_int");
 
     CEEU_assertions__add(as, CEEU_assert__str_equals(
         a_tr->message,
