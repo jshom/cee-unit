@@ -21,7 +21,7 @@ memory_test_build:
 
 memory_test_run:
 	docker run -it \
-		-v "$(shell PWD)":/src/dev/ \
+		-v "$(shell pwd)":/src/dev/ \
 		cee-unit-memory-test:latest \
 		bash -c \
 			'cd /src/dev/ && \
@@ -30,9 +30,6 @@ memory_test_run:
 				--leak-check=full \
 				--error-exitcode=1 \
 				-v ./test.o;'
-
-pwd_check:
-	echo $(shell pwd)
 
 tags:
 	ctags -R .
