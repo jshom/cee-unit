@@ -20,7 +20,7 @@ memory_test_build:
 	docker build -t cee-unit-memory-test ./tests/
 
 memory_test_run:
-	docker run -it \
+	docker run -i \
 		-v "$(shell pwd)":/src/dev/ \
 		cee-unit-memory-test:latest \
 		bash -c \
