@@ -13,3 +13,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run Tests
       run: make test
+  memory-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Memory Leak Test
+      run: |
+          make memory_test_build;
+          make memory_test_run;
